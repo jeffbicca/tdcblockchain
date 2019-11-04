@@ -1,0 +1,26 @@
+[
+    {
+        "name": "blockchain",
+        "policy": "OR('blockchainMSP.member')",
+        "requiredPeerCount": 0,
+        "maxPeerCount": 2,
+        "blockToLive": 0,
+        "memberOnlyRead": true
+    },
+    {
+        "name": "microservices",
+        "policy": "OR('microservicesMSP.member')",
+        "requiredPeerCount": 0,
+        "maxPeerCount": 2,
+        "blockToLive": 0,
+        "memberOnlyRead": true
+    },
+    {
+        "name": "stadium",
+        "policy": "OR('stadiumMSP.member')",
+        "requiredPeerCount": 0,
+        "maxPeerCount": 2,
+        "blockToLive": 0,
+        "memberOnlyRead": true
+    }
+]

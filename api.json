@@ -1,0 +1,22 @@
+[
+    {
+        "function": "registra",
+        "verb": "post",
+        "controller": "PessoafisicaController"
+    },
+    {
+        "function": "busca",
+        "verb": "get",
+        "controller": "PessoafisicaController"
+    },
+    {
+        "function": "verificaMaioridade",
+        "verb": "get",
+        "controller": "PessoafisicaController"
+    },
+    {
+        "function": "registraVinculaCNH",
+        "verb": "post",
+        "controller": "PessoafisicaController"
+    }
+]
