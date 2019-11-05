@@ -8,6 +8,7 @@ import {
   Param
 } from '@worldsibu/convector-core';
 import { Participant } from './participant.model';
+import { Transform } from '@theledger/fabric-chaincode-utils';
 
 @Controller('participant')
 export class ParticipantController extends ConvectorController<ChaincodeTx> {
@@ -53,6 +54,15 @@ export class ParticipantController extends ConvectorController<ChaincodeTx> {
     id: string
   ) {
     return await Participant.getOne(id, Participant, { privateCollection: this.track });
+  }
+
+  @Invokable()
+  public async findSpeakers() {
+    let queryString = { selector: { '_id': { '$gt': null } }};
+    let speakers = await this.tx.stub.getStub().getPrivateDataQueryResult(this.track, JSON.stringify(queryString))
+    speakers = (<any> speakers).iterator ? (<any> speakers).iterator : speakers; // hack for fabric 1.4
+
+    return await Transform.iteratorToList(speakers);
   }
 
   private get track() {
