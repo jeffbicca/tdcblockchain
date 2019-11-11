@@ -43,4 +43,25 @@ describe('Conferences', () => {
     expect(new Participant(participantBlockchain).id).to.exist;
   });
 
+  it('should update Participant verified flag in callback', async () => {
+    adapter.stub.setCreator('blockchainMSP');
+    const participant = new Participant({
+      id: uuid(),
+      name: 'ALICE',
+      tracks: [{ 'name': 'blockchain', 'status': 'A' }]
+    });
+
+    const txid = await participantCtrl.$withUser('Test').registerAsSpeaker(participant);
+    expect(txid).to.exist;
+
+    const participantBlockchain = await participantCtrl.$withUser('Test').findSpeaker(participant.id);
+    expect(new Participant(participantBlockchain).id).to.exist;
+
+    const txid2 = await participantCtrl.$withUser('Test').__callback(participantBlockchain);
+    expect(txid2).to.exist;
+
+    const participantVerified = await participantCtrl.$withUser('Test').findSpeaker(participant.id);
+    expect(new Participant(participantVerified).verified).to.be.true;
+  });
+
 });
