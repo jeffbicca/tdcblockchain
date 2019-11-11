@@ -42,9 +42,13 @@ export class ParticipantController extends ConvectorController<ChaincodeTx> {
   }
 
   @Invokable()
-  public async registerAsSpeaker(@Param(Participant) participant: Participant) {
+  public async registerAsSpeaker(
+    @Param(Participant) 
+    participant: Participant
+  ) {
     await participant.save({ privateCollection : this.track });
- 
+    this.tx.stub.setEvent('newSpeaker', participant);
+    
     return { txID: this.tx.stub.getStub().getTxID() };
   }
 
@@ -63,6 +67,18 @@ export class ParticipantController extends ConvectorController<ChaincodeTx> {
     speakers = (<any> speakers).iterator ? (<any> speakers).iterator : speakers; // hack for fabric 1.4
 
     return await Transform.iteratorToList(speakers);
+  }
+
+  @Invokable()
+  public async __callback(
+    @Param(Participant) 
+    participant: Participant
+  ) {
+    participant.verified = true;
+
+    await participant.save({ privateCollection : this.track });
+
+    return { txID: this.tx.stub.getStub().getTxID() };
   }
 
   private get track() {
