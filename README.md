@@ -6,8 +6,9 @@ Por padrão, novos projetos Convector incluem o <a href="https://github.com/worl
 
 Os fontes e a execução deste projeto foram apresentados no The Developers Conference (TDC) 2019 - Porto Alegre - Trilha blockchain em 30 de novembro de 2019.
 
-## Para começar
 ---
+
+## Para começar
 
 ```sh
 # Instalar o hurley globalmente
@@ -27,8 +28,9 @@ npm run cc:start -- conference
 hurl invoke conference participant_register '{ "id": "1", "name": "ALICE", "tracks": [{ "name": "blockchain", "status": "A" }] }' -o blockchain -C chconf -u client
 ```
 
-## Sobre
 ---
+
+## Sobre
 
 Este projeto visa demonstrar algumas *features* disponíveis no [Convector Suite](https://covalentx.com/convector/) e no que ele pode facilitar no ciclo de desenvolvimento de *smart contracts (chaincodes)* para o [Hyperledger Fabric](https://www.hyperledger.org/projects/fabric).
 
@@ -66,8 +68,9 @@ A demonstração visa focar nos seguintes pontos:
 
 - **Escuta de eventos** com o `FabricControllerAdapter` e `ClientFactory` (`conference-event/src/convector/fabric-controllers.service.ts` e `conference-event/src/listener/listener.service.ts`).
 
-## Exemplos de transações
 ---
+
+## Exemplos de transações
 
 Registro de um participante
 
@@ -93,32 +96,35 @@ Lista de palestrantes
 
 `hurl invoke conference participant_findSpeakers -o blockchain -C chconf -u client`
 
-## Eventos
 ---
+
+## Eventos
+
 Para realizar a escuta dos eventos, após subir a rede com o Hurley, execute:
 
 `npx lerna run start --scope conference-event --stream`
 
 Este comando sobe um servidor Express rodando na porta 3000 e que irá ficar escutando pelo evento `newSpeaker`, disparado pela blockchain na transação `registerAsSpeaker`.
 
-## Testes de unidade
 ---
+
+## Testes de unidade
 
 Para rodar os testes de unidade, basta executar:
 
 `npm run test`
 
+---
 
 ## Notas importantes
----
 
 > A rede montada pelo Hurley **jamais** deve ser levada a produção *as is*! Ela até pode ser utilizada como base. Porém, uma rede de produção **precisa ser projetada**! Isso inclui, por exemplo, definir uma  topologia, configurar credenciais, proteger o ledger por senha e configurar as CAs.
 
 > A rede gerada pelo Hurley fica disponível por padrão no caminho `~/hyperledger-fabric-network`. Nesta pasta ficam a topologia e os materiais criptográficos para cada *organization*.
 
+---
 
 ## Referências
----
 
 * <a href="https://docs.covalentx.com/convector" target="_blank">Convector documentation</a>
 * <a href="https://github.com/worldsibu" target="_blank">Convector projects</a>
