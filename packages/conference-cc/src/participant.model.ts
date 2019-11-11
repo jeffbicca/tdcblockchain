@@ -27,4 +27,7 @@ export class Participant extends ConvectorModel<Participant> {
   @Validate(yup.array(Track.schema()))
   public tracks: Array<FlatConvectorModel<Track>>;
 
+  @Validate(yup.boolean())
+  public verified: boolean;
+
 }
