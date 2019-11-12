@@ -26,9 +26,11 @@ describe('Conferences', () => {
     ]);
 
     adapter.addUser('Test');
+
+    participantCtrl = participantCtrl.$withUser('Test');
   });
   
-  it('should create Participant in private collection speakers', async () => {
+  it('should create and find Participant in private collection speakers', async () => {
     adapter.stub.setCreator('blockchainMSP');
     const participant = new Participant({
       id: uuid(),
@@ -36,11 +38,56 @@ describe('Conferences', () => {
       tracks: [{ 'name': 'blockchain', 'status': 'A' }]
     });
 
-    const txid = await participantCtrl.$withUser('Test').registerAsSpeaker(participant);
+    const txid = await participantCtrl.registerAsSpeaker(participant);
     expect(txid).to.exist;
 
-    const participantBlockchain = await participantCtrl.$withUser('Test').findSpeaker(participant.id);
+    const participantBlockchain = await participantCtrl.findSpeaker(participant.id);
     expect(new Participant(participantBlockchain).id).to.exist;
+  });
+
+  it('should create and find Participant in conference', async () => {
+    const participant = new Participant({
+      id: uuid(),
+      name: 'BOB',
+      tracks: [{ 'name': 'stadium', 'status': 'A' }]
+    });
+
+    const txid = await participantCtrl.register(participant);
+    expect(txid).to.exist;
+
+    const participantBlockchain = await participantCtrl.find(participant.id);
+    expect(new Participant(participantBlockchain).id).to.exist;
+  });
+
+  it('should create, find, update and return history of Participant in conference', async () => {
+    const participant = new Participant({
+      id: uuid(),
+      name: 'CAROL',
+      tracks: [{ 'name': 'microservices', 'status': 'A' }]
+    });
+
+    const txid = await participantCtrl.register(participant);
+    expect(txid).to.exist;
+
+    const participantBlockchain = await participantCtrl.find(participant.id);
+    expect(new Participant(participantBlockchain).id).to.exist;
+    
+    participantBlockchain.verified = true;
+    const txid2 = await participantCtrl.register(participantBlockchain);
+    expect(txid2).to.exist;
+
+    const verifiedParticipantBlockchain = await participantCtrl.find(participant.id);
+    expect(new Participant(verifiedParticipantBlockchain).verified).to.be.true;
+    
+    const history = await participantCtrl.history(participant.id);
+    expect(history).to.not.be.empty;
+    expect(history).to.be.lengthOf(2);
+    
+    const participantBeforeVerified: Participant = new Participant(history[0].value);
+    expect(participantBeforeVerified.verified).to.be.undefined;
+
+    const participantAfterVerified: Participant = new Participant(history[1].value);
+    expect(participantAfterVerified.verified).to.be.true;
   });
 
   it('should update Participant verified flag in callback', async () => {
@@ -51,16 +98,16 @@ describe('Conferences', () => {
       tracks: [{ 'name': 'blockchain', 'status': 'A' }]
     });
 
-    const txid = await participantCtrl.$withUser('Test').registerAsSpeaker(participant);
+    const txid = await participantCtrl.registerAsSpeaker(participant);
     expect(txid).to.exist;
 
-    const participantBlockchain = await participantCtrl.$withUser('Test').findSpeaker(participant.id);
+    const participantBlockchain = await participantCtrl.findSpeaker(participant.id);
     expect(new Participant(participantBlockchain).id).to.exist;
 
-    const txid2 = await participantCtrl.$withUser('Test').__callback(participantBlockchain);
+    const txid2 = await participantCtrl.__callback(participantBlockchain);
     expect(txid2).to.exist;
 
-    const participantVerified = await participantCtrl.$withUser('Test').findSpeaker(participant.id);
+    const participantVerified = await participantCtrl.findSpeaker(participant.id);
     expect(new Participant(participantVerified).verified).to.be.true;
   });
 
