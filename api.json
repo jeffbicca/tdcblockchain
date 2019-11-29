@@ -1,22 +1,32 @@
 [
     {
-        "function": "registra",
+        "function": "register",
         "verb": "post",
-        "controller": "PessoafisicaController"
+        "controller": "ParticipantController"
     },
     {
-        "function": "busca",
+        "function": "find",
         "verb": "get",
-        "controller": "PessoafisicaController"
+        "controller": "ParticipantController"
     },
     {
-        "function": "verificaMaioridade",
+        "function": "history",
         "verb": "get",
-        "controller": "PessoafisicaController"
+        "controller": "ParticipantController"
     },
     {
-        "function": "registraVinculaCNH",
+        "function": "registerAsSpeaker",
         "verb": "post",
-        "controller": "PessoafisicaController"
+        "controller": "ParticipantController"
+    },
+    {
+        "function": "findSpeaker",
+        "verb": "get",
+        "controller": "ParticipantController"
+    },
+    {
+        "function": "findSpeakers",
+        "verb": "get",
+        "controller": "ParticipantController"
     }
 ]
